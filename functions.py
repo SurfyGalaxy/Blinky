@@ -25,7 +25,7 @@ def set_days_left(days):
     days_left = int(days)
 
 def load_ysws(file_input):
-    global stats, file, target, username, start_days, scope, loaded
+    global stats, file, target, start_days, scope, loaded
     file = f"{file_input.lower().replace(' ', '_')}.json"
     
     if file in os.listdir():
@@ -35,18 +35,22 @@ def load_ysws(file_input):
             target = loaded_data["target_hours"] * 3600
             start_days = loaded_data["days"]
             scope = loaded_data["projects"]
+            print("Loaded")
 
         response = requests.get(f"https://hackatime.hackclub.com/api/v1/users/{username}/stats?features=projects,languages")
+        print(response)
         if response.status_code == 200:
             api_data = response.json()
             stats = api_data["data"]
+            print(f"stats: {stats}")
             loaded = True
             init_project_list()
             return True
     return False
 
 def init_ysws(username, target_hours):
-    global stats, loaded, response, target, scope
+    global stats, loaded, response, target, scope, global_username
+    global_username = username
     response = requests.get(f"https://hackatime.hackclub.com/api/v1/users/{username}/stats?features=projects,languages")
     if response.status_code == 404:
         return False
@@ -81,7 +85,7 @@ def calculate_stats():
     percent_done = (total_time / target) * 100 if target > 0 else 0
 
 def save_ysws(start_days, ysws_name):
-    global file, loaded, username, target, scope
+    global file, loaded, global_username, target, scope
     if loaded: # Updating a profile that already exists
         os.remove(file)
         print("Here")
@@ -92,9 +96,9 @@ def save_ysws(start_days, ysws_name):
         print(file)
     
     save_data = {
-        "username": username,
+        "username": global_username,
         "target_hours": target // 3600,
-        "days": start_days,
+        "days": int(start_days),
         "projects": scope
     }
     
