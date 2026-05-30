@@ -120,7 +120,7 @@ def save_projects(project_listbox):
 
 def get_days_left(offset):
     tk.Label(root, text="How many days do you have till your hours are due? ").grid(row=0+offset, column=0)
-    tk.Label(root, text="Pick one:")
+    tk.Label(root, text="Pick one:").grid(row=1+offset, column=0)
     tk.Label(root, text="How many days ago did you start?").grid(row=2+offset, column=0)
     tk.Label(root, text="How many days did you have to start with?").grid(row=3+offset, column=0)
 
@@ -129,8 +129,8 @@ def get_days_left(offset):
     start_days_entry = tk.Entry(root)
 
     days_left_entry.grid(row=0+offset, column=2)
-    days_ago_entry.grid(row=1+offset, column=2)
-    start_days_entry.grid(row=2+offset, column=2)
+    days_ago_entry.grid(row=2+offset, column=2)
+    start_days_entry.grid(row=3+offset, column=2)
 
     tk.Button(root, text="Submit", command=lambda: render_stats(days_left_entry, days_ago_entry, start_days_entry)).grid(row=4+offset, column=1)
 
@@ -143,21 +143,18 @@ def render_stats(days_left_entry, days_ago_entry, start_days_entry):
         widget.destroy()
     
     func.set_days_left(days_left)
-    func.calculate_stats(days_left, days_ago, start_days_entry)  
+      
+    data = func.calculate_stats(days_left, days_ago, start_days)
     
-    total_time = func.total_time
-    target = func.target
-    delta = func.delta
-    time_daily = func.time_daily
-    percent_done = func.percent_done
-    
-    tk.Label(root, text=f"Banked time: {datetime.timedelta(seconds=int(total_time))}").pack()
-    tk.Label(root, text=f"Target time: {datetime.timedelta(seconds=int(target))}").pack()
-    tk.Label(root, text=f"Time left: {datetime.timedelta(seconds=int(delta))}").pack()
-    tk.Label(root, text=f"Required Daily code time: {datetime.timedelta(seconds=int(time_daily))}").pack()
-    tk.Label(root, text=f"Percent complete: {round(percent_done)}%").pack()
-    
-    tk.Button(root, text="Save YSWS Profile", command=lambda: save_profile_init(0, days_left)).pack()
+    if data != False:
+        tk.Label(root, text=f"Banked time: {datetime.timedelta(seconds=int(data[0]))}").pack()
+        tk.Label(root, text=f"Target time: {datetime.timedelta(seconds=int(data[1]))}").pack()
+        tk.Label(root, text=f"Time left: {datetime.timedelta(seconds=int(data[2]))}").pack()
+        tk.Label(root, text=f"Required Daily code time: {datetime.timedelta(seconds=int(data[3]))}").pack()
+        tk.Label(root, text=f"Percent complete: {round(data[4])}%").pack()   
+        tk.Button(root, text="Save YSWS Profile", command=lambda: save_profile_init(0, days_left)).pack()
+    else:
+        tk.Label(root, text="Something's gone wrong...")
 
 def save_profile_init(offset, days_left):
     for widget in root.winfo_children():

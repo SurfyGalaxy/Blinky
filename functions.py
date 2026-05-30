@@ -71,7 +71,7 @@ def init_project_list():
 
 def calculate_stats(days_left, days_ago, start_days):
     global stats, target, delta, total_time, percent_done, time_daily, scope, average_rate
-
+    print(f"Start days type: {type(start_days)} \nDays ago type: {type(start_days)}")
     if days_left == "":
         days_left = 1
     else:
@@ -81,22 +81,25 @@ def calculate_stats(days_left, days_ago, start_days):
         try:
             start_days = int(start_days)
         except ValueError:
+            print("ValueError: start_days not a valid string")
             return False
         days_ago = start_days - days_left
     
     if start_days == "":
         try:
-            start_days = int(start_days)
+            days_ago = int(days_ago)
         except ValueError:
+            print("ValueError: days_ago not a valid string")
             return False
         start_days = days_ago + days_left
-
+    
     total_time = 0
     for proj in stats['projects']:
         if proj["name"] in scope:
             total_time += proj["total_seconds"]
-    
-    delta = target - total_time
+    print(f"Target: {target}\nTotal: {total_time}")
+    delta = target - total_time # not working for some reason
+    print(delta)
     print(days_left)
     if days_left and days_left > 0:
         time_daily = delta / days_left
@@ -104,6 +107,7 @@ def calculate_stats(days_left, days_ago, start_days):
         time_daily = 0
     percent_done = (total_time / target) * 100 if target > 0 else 0
     average_rate = total_time / start_days
+    return [total_time, target, delta, time_daily, percent_done]
 
 def save_ysws(start_days, ysws_name):
     global file, loaded, global_username, target, scope
