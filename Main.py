@@ -33,9 +33,7 @@ def ysws_profile_load_answer(listbox):
     for widget in root.winfo_children():
         widget.destroy()
     if selection:
-        tk.Label(root, text=f"Loading {selection}...").pack()
         func.load_ysws(selection)
-        # After loading, ask about editing projects
         binary_choice("Edit / Add some projects?", selected, project_choice_answer)
     else:
         tk.Label(root, text="Got to pick one, or use the manual loading").pack()
@@ -105,7 +103,7 @@ def project_editing():
         project_listbox.insert(tk.END, proj)
 
     for i in range(project_listbox.size()):
-        project_name = project_listbox.get(i)  # Fixed typo
+        project_name = project_listbox.get(i)  
         if project_name in scope:
             project_listbox.selection_set(i)
     
@@ -122,21 +120,30 @@ def save_projects(project_listbox):
 
 def get_days_left(offset):
     tk.Label(root, text="How many days do you have till your hours are due? ").grid(row=0+offset, column=0)
+    tk.Label(root, text="Pick one:")
+    tk.Label(root, text="How many days ago did you start?").grid(row=2+offset, column=0)
+    tk.Label(root, text="How many days did you have to start with?").grid(row=3+offset, column=0)
 
     days_left_entry = tk.Entry(root)
-    
+    days_ago_entry = tk.Entry(root)
+    start_days_entry = tk.Entry(root)
+
     days_left_entry.grid(row=0+offset, column=2)
+    days_ago_entry.grid(row=1+offset, column=2)
+    start_days_entry.grid(row=2+offset, column=2)
 
-    tk.Button(root, text="Submit", command=lambda: render_stats(days_left_entry)).grid(row=2+offset, column=1)
+    tk.Button(root, text="Submit", command=lambda: render_stats(days_left_entry, days_ago_entry, start_days_entry)).grid(row=4+offset, column=1)
 
-def render_stats(days_left_entry): 
-    days_left = int(days_left_entry.get())  
+def render_stats(days_left_entry, days_ago_entry, start_days_entry):
+    days_left = days_left_entry.get()
+    days_ago = days_ago_entry.get()
+    start_days = start_days_entry.get()
     
     for widget in root.winfo_children():
         widget.destroy()
     
     func.set_days_left(days_left)
-    func.calculate_stats()  
+    func.calculate_stats(days_left, days_ago, start_days_entry)  
     
     total_time = func.total_time
     target = func.target
@@ -201,7 +208,7 @@ def render_stats_from_saved():
     tk.Label(root, text=f"Time left: {datetime.timedelta(seconds=int(delta))}").pack()
     tk.Label(root, text=f"Required Daily code time: {datetime.timedelta(seconds=int(time_daily))}").pack()
     tk.Label(root, text=f"Percent complete: {round(percent_done)}%").pack()
-    
+    tk.Label(root, text="").pack()
     tk.Button(root, text="Save YSWS Profile", command=lambda: save_profile_init(0, func.days_left)).pack()
 
 root = tk.Tk()

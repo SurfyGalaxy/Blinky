@@ -69,8 +69,28 @@ def init_project_list():
             if proj["total_seconds"] != 0:
                 names.append(proj["name"])
 
-def calculate_stats():
-    global stats, target, delta, total_time, percent_done, time_daily, scope
+def calculate_stats(days_left, days_ago, start_days):
+    global stats, target, delta, total_time, percent_done, time_daily, scope, average_rate
+
+    if days_left == "":
+        days_left = 1
+    else:
+        days_left = int(days_left)
+    
+    if days_ago == "":
+        try:
+            start_days = int(start_days)
+        except ValueError:
+            return False
+        days_ago = start_days - days_left
+    
+    if start_days == "":
+        try:
+            start_days = int(start_days)
+        except ValueError:
+            return False
+        start_days = days_ago + days_left
+
     total_time = 0
     for proj in stats['projects']:
         if proj["name"] in scope:
@@ -83,6 +103,7 @@ def calculate_stats():
     else:
         time_daily = 0
     percent_done = (total_time / target) * 100 if target > 0 else 0
+    average_rate = total_time / start_days
 
 def save_ysws(start_days, ysws_name):
     global file, loaded, global_username, target, scope
