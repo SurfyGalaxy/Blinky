@@ -209,6 +209,7 @@ def render_stats_from_saved():
     tk.Button(root, text="Save YSWS Profile", command=lambda: save_profile_init(0, func.days_left)).pack()
 
 root = tk.Tk()
+root.title("Blinky YSWS status thing")
 selected = tk.StringVar(value="")
 binary_choice("Load an existing YSWS profile?", selected, ysws_init_load_answer)
 root.mainloop()
