@@ -19,3 +19,8 @@ Just follow the prompts, and it'll give you lots of data, including:
 - The amount of time you need to get
 - An estimation of how long you'd need to code daily to meet your goal
 - How much you've completed, in a percentage
+
+## AI Declaration:
+
+No AI was used in this project
+(You can tell bc the code is terrible /hj)
