@@ -92,8 +92,6 @@ def project_editing():
     func.init_project_list()
     scope = func.scope
     projects = func.names
-    print(scope)
-    print(projects)
 
     tk.Label(root, text="Which projects are being used in this YSWS?").pack()
 
