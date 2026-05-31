@@ -133,6 +133,7 @@ def get_days_left(offset):
     tk.Button(root, text="Submit", command=lambda: render_stats(days_left_entry, days_ago_entry, start_days_entry)).grid(row=4+offset, column=1)
 
 def render_stats(days_left_entry, days_ago_entry, start_days_entry):
+    global days_left, days_ago, start_days
     days_left = days_left_entry.get()
     days_ago = days_ago_entry.get()
     start_days = start_days_entry.get()
@@ -186,11 +187,10 @@ def save_profile_init_answer(ysws_name_entry, start_day_entry, default_days):
         root.after(1500, lambda: save_profile_init(1, default_days))
 
 def render_stats_from_saved():
-    # Recalculate with existing days_left
     for widget in root.winfo_children():
         widget.destroy()
-    
-    func.calculate_stats()
+    global days_left, days_ago, start_days
+    func.calculate_stats(days_left, days_ago, start_days)
     
     total_time = func.total_time
     target = func.target
@@ -203,8 +203,6 @@ def render_stats_from_saved():
     tk.Label(root, text=f"Time left: {datetime.timedelta(seconds=int(delta))}").pack()
     tk.Label(root, text=f"Required Daily code time: {datetime.timedelta(seconds=int(time_daily))}").pack()
     tk.Label(root, text=f"Percent complete: {round(percent_done)}%").pack()
-    tk.Label(root, text="").pack()
-    tk.Button(root, text="Save YSWS Profile", command=lambda: save_profile_init(0, func.days_left)).pack()
 
 root = tk.Tk()
 root.title("Blinky YSWS status thing")
