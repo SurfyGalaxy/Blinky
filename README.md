@@ -24,3 +24,6 @@ Just follow the prompts, and it'll give you lots of data, including:
 
 No AI was used in this project
 (You can tell bc the code is terrible /hj)
+
+## Known bugs:
+- Sometimes it crashes when loading a YSWS profile. I don't know why or how, and I can't recreate it on a VM or on my laptop
