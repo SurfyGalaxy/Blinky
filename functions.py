@@ -68,10 +68,6 @@ def init_project_list():
 
 def calculate_stats(days_left, days_ago, start_days):
     global stats, target, delta, total_time, percent_done, time_daily, scope, average_rate
-    if days_left == "":
-        days_left = 1
-    else:
-        days_left = int(days_left)
     
     if days_ago == "":
         try:
@@ -79,6 +75,11 @@ def calculate_stats(days_left, days_ago, start_days):
         except ValueError:
             return False
         days_ago = start_days - days_left
+    
+    if days_left == "":
+        days_left = 1
+    else:
+        days_left = int(days_left)
     
     if start_days == "":
         try:
@@ -97,7 +98,6 @@ def calculate_stats(days_left, days_ago, start_days):
     else:
         time_daily = 0
     percent_done = (total_time / target) * 100 if target > 0 else 0
-    average_rate = total_time / start_days
     return [total_time, target, delta, time_daily, percent_done]
 
 def save_ysws(start_days, ysws_name):
