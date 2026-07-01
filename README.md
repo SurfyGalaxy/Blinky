@@ -26,4 +26,4 @@ No AI was used in this project
 (You can tell bc the code is terrible /hj)
 
 ## Known bugs:
-- Sometimes it crashes when loading a YSWS profile. I don't know why or how, and I can't recreate it on a VM or on my laptop
+- Sometimes it crashes when loading a YSWS profile. I don't know why or how, and I can't recreate it on a VM or on my laptop. (if someone shows me how on a clean VM i'll fix it)
